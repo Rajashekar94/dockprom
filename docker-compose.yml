@@ -1,4 +1,4 @@
-version: '2.1'
+version: '2'
 
 networks:
   monitor-net:
@@ -127,8 +127,8 @@ services:
     volumes:
       - ./caddy/:/etc/caddy/
     environment:
-      - ADMIN_USER=${ADMIN_USER:-admin}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - ADMIN_USER
+      - ADMIN_PASSWORD
     restart: unless-stopped
     networks:
       - monitor-net
