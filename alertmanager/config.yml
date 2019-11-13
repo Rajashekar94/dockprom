@@ -32,7 +32,7 @@ receivers:
     from: 'rajashekaryadav470@gmail.com'
     smarthost: 'smtp.gmail.com:587'
     auth_username: 'rajashekaryadav470@gmail.com'
-    auth_password: 'Raja@1993'
+    auth_password: '88888'
     auth_secret: 'rajashekaryadav470@gmail.com'
     auth_identity: 'rajashekaryadav470@gmail.com'
 ~
