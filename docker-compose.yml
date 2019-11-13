@@ -1,12 +1,12 @@
-version: '2'
+version: '3.7'
 
 networks:
   monitor-net:
-    driver: bridge
+    driver: overlay
 
 volumes:
     prometheus_data: {}
-    grafana_data: {}
+    grafanadata: {}
 
 services:
 
@@ -41,7 +41,7 @@ services:
       - '--storage.path=/alertmanager'
     restart: unless-stopped
     expose:
-      - 9093
+      - 9094
     networks:
       - monitor-net
     labels:
@@ -66,19 +66,18 @@ services:
       - monitor-net
     labels:
       org.label-schema.group: "monitoring"
-
+  
   cadvisor:
-    image: google/cadvisor:v0.33.0
+    image: google/cadvisor:latest
     container_name: cadvisor
+    ports:
+    - 8080:8080
     volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
-    restart: unless-stopped
-    expose:
-      - 8080
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    
     networks:
       - monitor-net
     labels:
@@ -88,7 +87,7 @@ services:
     image: grafana/grafana:6.3.6
     container_name: grafana
     volumes:
-      - grafana_data:/var/lib/grafana
+      - grafanadata:/var/lib/grafana
       - ./grafana/datasources:/etc/grafana/datasources
       - ./grafana/dashboards:/etc/grafana/dashboards
       - ./grafana/setup.sh:/setup.sh
@@ -122,13 +121,14 @@ services:
     ports:
       - "3000:3000"
       - "9090:9090"
-      - "9093:9093"
+      - "9094:9094"
+      - "8081:8081"
       - "9091:9091"
     volumes:
       - ./caddy/:/etc/caddy/
     environment:
-      - ADMIN_USER
-      - ADMIN_PASSWORD
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
     restart: unless-stopped
     networks:
       - monitor-net

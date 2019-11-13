@@ -1,11 +1,39 @@
+#route:
+ #   receiver: 'slack'
+
+#receivers:
+ #   - name: 'slack'
+  #    slack_configs:
+   #       - send_resolved: true
+    #        text: "{{ .CommonAnnotations.description }}"
+     #       username: 'Prometheus'
+      #      channel: '#<channel-name>'
+       #     api_url: 'https://hooks.slack.com/services/<webhook-id>'
+
+
 route:
-    receiver: 'slack'
+  # default route if none match
+  receiver: alert-emailer
+
+  # The labels by which incoming alerts are grouped together. For example,
+  # multiple alerts coming in for cluster=A and alertname=LatencyHigh would
+  # be batched into a single group.
+  # TODO:
+  group_by: ['alertname', 'priority']
+
+  # All the above attributes are inherited by all child routes and can
+  # overwritten on each.
 
 receivers:
-    - name: 'slack'
-      slack_configs:
-          - send_resolved: true
-            text: "{{ .CommonAnnotations.description }}"
-            username: 'Prometheus'
-            channel: '#<channel-name>'
-            api_url: 'https://hooks.slack.com/services/<webhook-id>'
+- name: alert-emailer
+  email_configs:
+  - to: 'rajashekaryadav470@gmail.com'
+    send_resolved: false
+    from: 'rajashekaryadav470@gmail.com'
+    smarthost: 'smtp.gmail.com:587'
+    auth_username: 'rajashekaryadav470@gmail.com'
+    auth_password: 'Raja@1993'
+    auth_secret: 'rajashekaryadav470@gmail.com'
+    auth_identity: 'rajashekaryadav470@gmail.com'
+~
+

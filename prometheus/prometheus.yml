@@ -40,7 +40,7 @@ alerting:
   - scheme: http
     static_configs:
     - targets: 
-      - 'alertmanager:9093'
+      - 'alertmanager:9094'
 
 #  - job_name: 'nginx'
 #    scrape_interval: 10s
